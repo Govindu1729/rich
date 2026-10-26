@@ -41,7 +41,46 @@ The Syntax constructor (and :meth:`~rich.syntax.Syntax.from_path`) accept a ``th
 Background color
 ----------------
 
-You can override the background color from the theme by supplying a ``background_color`` argument to the constructor. This should be a string in the same format a style definition accepts, e.g. "red", "#ff0000", "rgb(255,0,0)" etc. You may also set the special value "default" which will use the default background color set in the terminal.
+You can override the background color from the theme by supplying a ``background_color`` argument to the constructor. This should be a string in the same format as style definition accepts, e.g. "red", "#ff0000", "rgb(255,0,0)" etc. You may also set the special value "default" which will use the default background color set in the terminal.
+
+
+Stylize Range
+-------------
+
+With a ``Syntax`` object, you can stylize specific portions of the text using the ``stylize_range()`` method.
+
+The ``stylize_range()`` method accepts:
+
+- A :class:`~rich.style.Style` object
+- A tuple for the start position: ``(line, column)``
+- A tuple for the end position: ``(line, column)``
+
+**Position indexing:**
+
+- Lines/Rows are **1-based** (the first line is 1)
+- Columns are **0-based** (the first character in a line is 0)
+
+**Example - highlighting the word "True":**
+
+::
+
+    from rich.syntax import Syntax
+    from rich.style import Style
+
+    syntax = Syntax("example = True", "python")
+    syntax.stylize_range(Style(bgcolor="deep_pink4"), (1, 10), (1, 14))
+
+**Example - adding background color to "456":**
+
+::
+
+    from rich.syntax import Syntax
+    from rich.style import Style
+
+    syntax = Syntax("123\n456\n789", "python")
+    syntax.stylize_range(Style(bgcolor="deep_pink4"), (2, 0), (2, 3))
+
+**Note:** Be careful with text containing line breaks (``\n``), as the line/row number changes at each line break.
 
 
 Syntax CLI
@@ -54,4 +93,4 @@ You can use this class from the command line. Here's how you would syntax highli
 For the full list of arguments, run the following::
 
     python -m rich.syntax -h
-    
+
